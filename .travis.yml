@@ -16,6 +16,7 @@ before_script:
   - sudo sed -i "s'./manage.py'`which python` `pwd`/demo/manage.py'g" /etc/supervisor/conf.d/worker.conf
   - sudo sed -i "s'/home/example.com/www'`pwd`/demo'g" /etc/supervisor/conf.d/worker.conf
   - sudo /etc/init.d/supervisor stop
+  - cd demo && ./manage.py syncdb --noinput && cd -
   - sleep 3
   - sudo /etc/init.d/supervisor start
   - sleep 15

@@ -106,7 +106,7 @@ Local demo installation
 
 .. code-block:: bash
 
-    $ sudo apt-get install virtualenvwrapper supervisor redis-server git-core
+    $ sudo apt-get install virtualenvwrapper supervisor git-core
     $ mkvirtualenv django-celery-mon
     $ git clone https://github.com/LPgenerator/django-celery-mon.git
     $ cd django-celery-mon

@@ -36,7 +36,6 @@ if VERSION[:2] < (1, 6):
 
 
 BROKER_URL = 'django://'
-BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
 CELERY_MON_CELERY_WORKERS = ['default', 'mail']
 
 import djcelery

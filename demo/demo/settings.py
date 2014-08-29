@@ -84,6 +84,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    "kombu.transport.django",
     'djcelery',
     'celerymon',
 )
@@ -123,7 +124,7 @@ LOGGING = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-BROKER_URL = 'redis://localhost:6379/0'
+BROKER_URL = 'django://'
 CELERY_MON_CELERY_WORKERS = ['default', 'mail']
 
 try:
