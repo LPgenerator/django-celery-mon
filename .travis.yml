@@ -6,15 +6,23 @@ before_install:
   - export PIP_USE_MIRRORS=true
   - export DJANGO_SETTINGS_MODULE=celerymon.test_settings
   - sudo apt-get update -qq
-  - sudo apt-get install -y virtualenvwrapper supervisor redis-server git-core
+  - sudo apt-get install -y supervisor
 install:
   - pip install -e .
   - pip install -r requirements/tests.txt Django==$DJANGO
 before_script:
   - flake8 --exclude=migrations celerymon
+  - sudo cp demo/supervisor/worker.conf /etc/supervisor/conf.d/
+  - sudo sed -i "s'./manage.py'`which python` `pwd`/demo/manage.py'g" /etc/supervisor/conf.d/worker.conf
+  - sudo sed -i "s'/home/example.com/www'`pwd`/demo'g" /etc/supervisor/conf.d/worker.conf
+  - sudo /etc/init.d/supervisor stop
+  - sleep 3
+  - sudo /etc/init.d/supervisor start
+  - sleep 15
+  - sudo supervisorctl -c /etc/supervisor/supervisord.conf status
+  - cat /var/log/celery-mail_worker.log
 script:
-  - coverage run --branch --source=celerymon `which django-admin.py` test celerymon
-  - coverage report --omit="celerymon/test*"
+  - make test-travis PYTHON=`which python`
 env:
   - DJANGO=1.4.14
   - DJANGO=1.5.9

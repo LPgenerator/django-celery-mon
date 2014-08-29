@@ -11,7 +11,10 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 test:
-	django-admin.py test --settings=celerymon.test_settings celerymon
+	cd demo && ./manage.py test --settings=celerymon.test_settings celerymon
+
+test-travis:
+	cd demo && sudo $(PYTHON) manage.py test --settings=celerymon.test_settings celerymon
 
 coverage:
 	export DJANGO_SETTINGS_MODULE=celerymon.test_settings && \

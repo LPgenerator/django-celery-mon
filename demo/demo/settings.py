@@ -123,7 +123,7 @@ LOGGING = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-BROKER_URL = 'redis://127.0.0.1:6379/0'
+BROKER_URL = 'redis://localhost:6379/0'
 CELERY_MON_CELERY_WORKERS = ['default', 'mail']
 
 try:
