@@ -54,11 +54,11 @@ Installation
 
 .. code-block:: python
 
-    CELERY_MON_CELERY_QUEUES = ['default', 'mail']
+    CELERY_MON_CELERY_WORKERS = ['default', 'mail']
     CELERY_MON_NOTIFICATION_ENABLED = True
     CELERY_MON_NOTIFICATION_EMAILS = ['root@local.host']
 
-5. Configure supervisor:
+5. Configure supervisor (name of program should be equal into celery worker):
 
 .. code-block:: bash
 
@@ -106,16 +106,27 @@ Local demo installation
 
 .. code-block:: bash
 
-    $ sudo apt-get install virtualenvwrapper
+    $ sudo apt-get install virtualenvwrapper supervisor redis-server git-core
     $ mkvirtualenv django-celery-mon
     $ git clone https://github.com/LPgenerator/django-celery-mon.git
     $ cd django-celery-mon
     $ python setup.py develop
+    $ pip install -r requirements/package.txt
+    $ pip install -r requirements/tests.txt
     $ cd demo
-    $ pip install -r requirements.txt
-    $ python manage.py syncdb
-    $ python manage.py migrate
-    $ python manage.py shell
+    $ python manage.py syncdb --noinput
+    $ cp supervisor/worker.conf /etc/supervisor/conf.d/
+    $ sed -i "s'./manage.py'`which python` `pwd`/manage.py'g" /etc/supervisor/conf.d/worker.conf
+    $ sed -i "s'/home/example.com/www'`pwd`'g" /etc/supervisor/conf.d/worker.conf
+    $ /etc/init.d/supervisor stop; /etc/init.d/supervisor start
+    $ supervisorctl -c /etc/supervisor/supervisord.conf status
+    $ python manage.py check_celery_state
+        # not you can stop some queue, check state and stop it, for checking by monitor
+    $ supervisorctl -c /etc/supervisor/supervisord.conf stop mail
+    $ supervisorctl -c /etc/supervisor/supervisord.conf status
+    $ python manage.py check_celery_state
+    $ supervisorctl -c /etc/supervisor/supervisord.conf status
+
 
 
 Compatibility

@@ -84,19 +84,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'djcelery',
     'celerymon',
 )
-
-try:
-    import djcelery
-
-    INSTALLED_APPS += ('djcelery',)
-
-    djcelery.setup_loader()
-
-    BROKER_URL = 'redis://127.0.0.1:6379/4'
-except ImportError:
-    pass
 
 LOGGING = {
     'version': 1,
@@ -111,7 +101,11 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'console': {
+            'level': 'WARNING',
+            'class': 'logging.StreamHandler',
+        },
     },
     'loggers': {
         'django.request': {
@@ -119,15 +113,24 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'celerymon.management.commands.check_celery_state': {
+            'handlers': ['mail_admins', 'console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
     }
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-CELERY_MON_CELERY_QUEUES = ['default']
+BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_MON_CELERY_WORKERS = ['default', 'mail']
 
 try:
     from local_settings import *
 
 except ImportError:
     pass
+
+import djcelery
+djcelery.setup_loader()

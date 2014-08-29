@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'djcelery',
     'celerymon',
 ]
 
@@ -31,3 +32,10 @@ TEMPLATE_LOADERS = (
 
 if VERSION[:2] < (1, 6):
     TEST_RUNNER = 'discover_runner.DiscoverRunner'
+
+
+BROKER_URL = 'redis://127.0.0.1:6379/0'
+CELERY_MON_CELERY_WORKERS = ['default', 'mail']
+
+import djcelery
+djcelery.setup_loader()

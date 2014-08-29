@@ -16,10 +16,10 @@ test:
 coverage:
 	export DJANGO_SETTINGS_MODULE=celerymon.test_settings && \
 	coverage run --branch --source=celerymon `which django-admin.py` test celerymon && \
-	coverage report --omit="celerymon/test*,celerymon/migrations/*,celerymon/management/*"
+	coverage report --omit="celerymon/test*"
 
 pep8:
-	flake8 --exclude=migrations celerymon
+	flake8 celerymon
 
 release: clean
 	python setup.py register sdist upload --sign

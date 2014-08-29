@@ -1,4 +1,5 @@
 import logging
+import socket
 import time
 import os
 
@@ -33,7 +34,7 @@ class Command(BaseCommand):
             send_mail(
                 defaults.MON_NOTIFICATION_SUBJECT,
                 message, settings.DEFAULT_FROM_EMAIL,
-                defaults.MON_NOTIFICATION_EMAILS, fail_silently=True
+                defaults.MON_NOTIFICATION_EMAILS
             )
         logger.warning(message)
 
@@ -44,9 +45,10 @@ class Command(BaseCommand):
             return None
 
     def queue_is_available(self):
-        result = self.app.control.ping([self.queue])
+        broker = 'celery@' + self.queue
+        result = self.app.control.ping([broker])
         if result:
-            return result[-1].get(self.queue) == {'ok': 'pong'}
+            return result[-1].get(broker) == {'ok': 'pong'}
 
     def worker_is_run(self):
         info = self.supervisor_exec('getProcessInfo', self.queue)
@@ -61,15 +63,28 @@ class Command(BaseCommand):
         self.send_mail('Queue "%s" was restarted.' % self.queue)
 
     def check_all_queues(self):
-        for self.queue in settings.MON_CELERY_QUEUES.keys():
+        for self.queue in defaults.MON_CELERY_WORKERS:
             if not self.queue_is_available() or not self.worker_is_run():
                 self.worker_restart()
                 self.notify_admins()
 
+    def check_supervisor_state(self):
+        try:
+            state_data = self.supervisor_exec('getState')
+            if state_data and state_data.get('statecode') == 1:
+                return True
+        except socket.error:
+            pass
+
+    def supervisor_restart(self):
+        if os.system('service supervisor restart') != 0:
+            self.send_mail('Supervisor cannot be restarted')
+            raise Exception('Supervisor cannot be restarted')
+        self.send_mail('Supervisor was restarted')
+
     def check_supervisor(self):
-        if self.supervisor_exec('getState').get('statecode') != 1:
-            os.system('service supervisor restart')
-            self.send_mail('Supervisor is down')
+        if not self.check_supervisor_state():
+            self.supervisor_restart()
             time.sleep(180)
 
     def handle(self, *args, **options):

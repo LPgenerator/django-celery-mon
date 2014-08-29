@@ -18,7 +18,7 @@ MON_NOTIFICATION_SUBJECT = get_settings(
 MON_NOTIFICATION_ENABLED = get_settings(
     'CELERY_MON_NOTIFICATION_ENABLED', True)
 MON_NOTIFICATION_EMAILS = get_settings(
-    'CELERY_MON_NOTIFICATION_EMAILS', settings.ADMINS)
+    'CELERY_MON_NOTIFICATION_EMAILS', [n[1] for n in settings.ADMINS])
 
-MON_CELERY_QUEUES = get_settings(
-    'CELERY_MON_CELERY_QUEUES', ['default'])
+MON_CELERY_WORKERS = get_settings(
+    'CELERY_MON_CELERY_WORKERS', ['default'])
