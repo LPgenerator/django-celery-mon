@@ -5,8 +5,8 @@ from celerymon import get_version
 setup(
     name='django-celery-mon',
     version=get_version(),
-    description='Reusable Django app',
-    keywords="",
+    description='App for monitoring Celery workers',
+    keywords="django celery monitoring",
     long_description=open('README.rst').read(),
     author="GoTLiuM InSPiRiT",
     author_email='gotlium@gmail.com',

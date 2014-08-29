@@ -34,7 +34,7 @@ class Command(BaseCommand):
             send_mail(
                 defaults.MON_NOTIFICATION_SUBJECT,
                 message, settings.DEFAULT_FROM_EMAIL,
-                defaults.MON_NOTIFICATION_EMAILS
+                defaults.MON_NOTIFICATION_EMAILS, fail_silently=True
             )
         logger.warning(message)
 
