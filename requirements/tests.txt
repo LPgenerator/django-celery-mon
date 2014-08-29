@@ -1,0 +1,7 @@
+flake8==2.1.0
+django-discover-runner==1.0
+coverage==3.7
+coveralls==0.3
+django-celery==3.1.10
+redis==2.10.3
+supervisor==3.1.1
