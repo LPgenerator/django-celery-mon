@@ -4,10 +4,10 @@ Django-Celery-Monitor
 .. image:: https://api.travis-ci.org/LPgenerator/django-celery-mon.png?branch=master
     :alt: Build Status
     :target: https://travis-ci.org/LPgenerator/django-celery-mon
-.. image:: https://pypip.in/v/django-celery-mon/badge.png
+.. image:: https://img.shields.io/pypi/v/django-celery-mon.svg
     :alt: Current version on PyPi
     :target: https://crate.io/packages/django-celery-mon/
-.. image:: https://pypip.in/d/django-celery-mon/badge.png
+.. image:: https://img.shields.io/pypi/dm/django-celery-mon.svg
     :alt: Downloads from PyPi
     :target: https://crate.io/packages/django-celery-mon/
 
