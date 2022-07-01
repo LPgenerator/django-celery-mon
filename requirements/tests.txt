@@ -1,4 +1,4 @@
 flake8==2.1.0
 django-discover-runner==1.0
 django-celery==3.1.10
-supervisor==3.1.1
+supervisor==3.1.4
